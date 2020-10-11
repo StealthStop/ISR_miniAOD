@@ -8,7 +8,7 @@ Set up analyzer::
 cmsrel CMSSW_10_2_9
 cd CMSSW_10_2_9/src
 cmsenv
-git clone https://github.com/StealthStop/ISR_miniAOD.git
+git clone git@github.com:StealthStop/ISR_miniAOD.git
 scram b -j 4
 ```
 
