@@ -33,11 +33,11 @@
 // --------------------
 // class declaration
 // --------------------
-class DemoAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>  
+class ISR_miniAOD : public edm::one::EDAnalyzer<edm::one::SharedResources>  
 {
     public:
-        explicit DemoAnalyzer(const edm::ParameterSet&);
-        ~DemoAnalyzer();
+        explicit ISR_miniAOD(const edm::ParameterSet&);
+        ~ISR_miniAOD();
 
         static void fillDescriptions(edm::ConfigurationDescriptions& descriptions);
 
@@ -169,7 +169,7 @@ class DemoAnalyzer : public edm::one::EDAnalyzer<edm::one::SharedResources>
 // ------------------------------
 // constructors and destructor
 // ------------------------------
-DemoAnalyzer::DemoAnalyzer(const edm::ParameterSet& iConfig) :
+ISR_miniAOD::ISR_miniAOD(const edm::ParameterSet& iConfig) :
     genParticlesToken_(consumes<reco::GenParticleCollection>(iConfig.getUntrackedParameter<edm::InputTag>("genParticles")))
 
 {
@@ -291,7 +291,7 @@ DemoAnalyzer::DemoAnalyzer(const edm::ParameterSet& iConfig) :
 
 }
 
-DemoAnalyzer::~DemoAnalyzer()
+ISR_miniAOD::~ISR_miniAOD()
 {
    // do anything here that needs to be done at desctruction time
    // (e.g. close files, deallocate resources etc.)
@@ -301,7 +301,7 @@ DemoAnalyzer::~DemoAnalyzer()
 // Member functions
 // method called for each event 
 // -------------------------------
-void DemoAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
+void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
     using namespace edm;
 
@@ -535,21 +535,21 @@ void DemoAnalyzer::analyze(const edm::Event& iEvent, const edm::EventSetup& iSet
 // --------------------------------------------------------------
 // Method called once each job just before starting event loop  
 // --------------------------------------------------------------
-void DemoAnalyzer::beginJob()
+void ISR_miniAOD::beginJob()
 {
 }
 
 // ---------------------------------------------------------------
 // Method called once each job just after ending the event loop  
 // ---------------------------------------------------------------
-void DemoAnalyzer::endJob()
+void ISR_miniAOD::endJob()
 {
 }
 
 // -------------------------------------------------------------------------
 // Method fills 'descriptions' with the allowed parameters for the module 
 // -------------------------------------------------------------------------
-void DemoAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions) 
+void ISR_miniAOD::fillDescriptions(edm::ConfigurationDescriptions& descriptions) 
 {
     // The following says we do not know what parameters are allowed so do no validation
     // Please change this to state exactly what you do use, even if it is no parameters
@@ -567,7 +567,7 @@ void DemoAnalyzer::fillDescriptions(edm::ConfigurationDescriptions& descriptions
 // ---------------------------
 // Define this as a plug-in
 // ---------------------------
-DEFINE_FWK_MODULE(DemoAnalyzer);
+DEFINE_FWK_MODULE(ISR_miniAOD);
 
 
 

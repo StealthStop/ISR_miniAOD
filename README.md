@@ -14,6 +14,6 @@ scram b -j 4
 
 Run the analyzer:
 ```
-cd ISR_miniAOD/python
+cd ISR_miniAOD/miniAOD/python/
 cmsRun ConfFile_cfg.py 
 ```

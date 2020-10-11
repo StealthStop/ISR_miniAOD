@@ -1,6 +1,6 @@
 import FWCore.ParameterSet.Config as cms
 
-process = cms.Process("Demo")
+process = cms.Process("miniAOD")
 
 # -----------------
 # get the cfi files
@@ -17,13 +17,13 @@ process.maxEvents = cms.untracked.PSet( input = cms.untracked.int32(-1) ) # -1 f
 # get the root file
 # -----------------
 process.source = cms.Source("PoolSource",
-                                fileNames = cms.untracked.vstring('file:root://cmsxrootd.fnal.gov//store/mc/RunIISummer16MiniAODv3/RPV_2t6j_mStop-550_mN1-100_TuneCUEP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/90000/16D5849D-50F3-E811-89F4-0CC47AFC3C86.root')
+                                fileNames = cms.untracked.vstring('root://cmsxrootd.fnal.gov//store/mc/RunIISummer16MiniAODv3/RPV_2t6j_mStop-550_mN1-100_TuneCUEP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/90000/16D5849D-50F3-E811-89F4-0CC47AFC3C86.root')
                            )
 
 # ---------------------
 # get the gen particles
 # ---------------------
-process.demo = cms.EDAnalyzer('DemoAnalyzer',
+process.demo = cms.EDAnalyzer('ISR_miniAOD',
                                 genParticles = cms.untracked.InputTag("prunedGenParticles"))
 
 
