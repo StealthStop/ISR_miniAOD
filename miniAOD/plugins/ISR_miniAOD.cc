@@ -27,6 +27,14 @@
 #include "DataFormats/HepMCCandidate/interface/GenParticle.h"
 #include "DataFormats/HepMCCandidate/interface/GenParticleFwd.h"
 
+// from TreeMaker/Utils/src/ISRJetProducer.cc 
+#include "FWCore/Framework/interface/ESHandle.h"
+#include "FWCore/Framework/interface/EventSetup.h"
+#include "FWCore/Framework/interface/global/EDProducer.h"
+#include "DataFormats/Math/interface/deltaR.h"
+#include "DataFormats/PatCandidates/interface/Jet.h"
+#include "DataFormats/ParticleFlowCandidate/interface/PFCandidate.h"
+
 #include "TFile.h"
 #include "TTree.h"
 
@@ -50,7 +58,10 @@ class ISR_miniAOD : public edm::one::EDAnalyzer<edm::one::SharedResources>
         // Member data
         // ----------- 
         edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;        
-        
+    
+        // latest ISR       
+        TH1F * ISR_Eta_miniAOD; 
+
         // mother:proton - daughter:quark - status:71,73
         TH1F * NumMom_pq_71;
         TH1F * NumDau_pq_71;
@@ -174,6 +185,9 @@ ISR_miniAOD::ISR_miniAOD(const edm::ParameterSet& iConfig) :
 
 {
     edm::Service<TFileService> fs;
+
+    // latest ISR
+    ISR_Eta_miniAOD   = fs->make<TH1F>( "ISR_Eta_miniAOD", "ISR Eta", 100, -6, 6  );
 
     // mother:proton - daughter:quark - status:71,73
     NumMom_pq_71      = fs->make<TH1F>( "NumMom_pq_71", "Number of Mother", 50,  0, 50 );
@@ -323,10 +337,12 @@ void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
         if (momNum == 0) continue;        
         
         const reco::Candidate *mom = p.mother();
-        int momPdgId = mom->pdgId();
-        int dauNum   = mom->numberOfDaughters();
-        double momPt = mom->pt();
-        double dauPt = p.p4().pt();
+        //int grandMomPdgId = mom->mother()->pdgId(); // SYY FSR  
+        int momPdgId  = mom->pdgId();
+        int dauNum    = mom->numberOfDaughters();
+        double momPt  = mom->pt();
+        double dauPt  = p.p4().pt();
+        double dauEta = p.p4().eta();
 
         //for (int d = 0; d < dauNum; d++)
         //{          
@@ -340,12 +356,49 @@ void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
             //if ( ( abs(dauPdgId) <= 6      || abs(dauPdgId) == 21 )
             //       && ( abs(momPdgId) <= 6 || abs(momPdgId) == 21            || abs(momPdgId) == 2212 )
             //       && ( status == 23       || (status <= 49 && status >= 41) || (status <= 79 && status >= 71) ) )
+
+            // latest ISR 
+            if ( ( abs(dauPdgId) <= 6  && abs(momPdgId) == 21 && status == 23 ) ||
+               (   abs(dauPdgId) == 21 && abs(momPdgId) <= 6  && status == 23 ) || 
+               (   abs(dauPdgId) == 21 && abs(momPdgId) == 21 && status == 23 ) ) 
+            {
+                ISR_Eta_miniAOD->Fill(dauEta); 
+                
+                //std::cout << "momPdgId:  " << momPdgId  << " || " 
+                //          << "dauPdgId:  " << dauPdgId  << " || "  
+                //          << "status:    " << status    << std::endl;
+            }       
+
+            // -------------------------
+            // print out FSR status code
+            // -------------------------
+            // RPV FSR
+            // t, b mom FSR
+            //if ( abs(dauPdgId) == 21 && ( abs(momPdgId) == 5 || abs(momPdgId) == 6 ) ) 
             //{
-            //    std::cout << "momPdgId:  " << momPdgId  << " || " 
-            //              << "dauPdgId:  " << dauPdgId  << " || "  
-            //              << "status:    " << status    << std::endl;
-            //}       
- 
+            //    std::cout << "quark mom - RPV FSR status: " << status << std::endl;
+            //}
+            
+            // LSP grandMom
+            //if ( abs(momPdgId) != 1000022 ) continue;
+            //if ( abs(dauPdgId) < 6 )
+            //{
+            //    for (int d = 0; d < grandDauNum; d++)
+            //    {
+            //        int grandDauPdgId = p.daughter(d)->pdgId();
+            //        if (abs(grandDauPdgId) == 21)
+            //        {
+            //            std::cout << "LSP grandMom - RPV FSR status: " << status << std::endl;       
+            //        }
+            //    }            
+            //}
+
+            // SYY FSR
+            //if ( abs(dauPdgId) == 21 && abs(momPdgId) == 1000006 )                       
+            //{   
+            //    std::cout << "SYY FSR status: " << status << std::endl;
+            //}
+
             // --------------------------------------------- 
             // mother:proton - daughter:quark - status:71,73
             // --------------------------------------------- 
