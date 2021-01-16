@@ -189,14 +189,12 @@ void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
         // dau-mom: gluon - b
         if ( abs(dauPdgId) == 21  && abs(momPdgId) == 5 && status == 23 )
         {
-            //std::cout << "dau: " << dauPdgId << " || " << "mom: " << momPdgId << std::endl;
             miniAOD_ISR_Eta_gb->Fill(dauEta);
         }
 
         // dau-mom: gluon - t
         if ( abs(dauPdgId) == 21  && abs(momPdgId) == 6 && status == 23 )
         {
-            //std::cout << "dau: " << dauPdgId << " || " << "mom: " << momPdgId << std::endl;
             miniAOD_ISR_Eta_gt->Fill(dauEta);
         }
     
@@ -215,7 +213,6 @@ void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
         // dau-mom: t - gluon
         if ( abs(dauPdgId) == 6  && abs(momPdgId) == 21 && status == 23 )
         {
-            //std::cout << "dau: " << dauPdgId << " || " << "mom: " << momPdgId << std::endl;
             miniAOD_ISR_Eta_tg->Fill(dauEta);
         }
 
@@ -224,8 +221,6 @@ void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
         {
             miniAOD_ISR_Eta_gg->Fill(dauEta);
         }
-
-
 
     } // gen particles loop
     
