@@ -33,14 +33,24 @@ process.source = cms.Source("PoolSource",
                                 # ------------------------ 2016 RPV_850 ------------------------
                                 # -------------------------------------------------------------- 
                                 #fileNames = cms.untracked.vstring('root://cmsxrootd.fnal.gov//store/mc/RunIISummer16MiniAODv3/RPV_2t6j_mStop-850_mN1-100_TuneCUEP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/20000/2646E8AE-4DF1-E811-A7D4-549F358EB7D7.root')
-                                fileNames = cms.untracked.vstring('file:/uscms_data/d3/semrat/SUSY/CMSSW_11_2_0_pre5/src/ISR_miniAOD/CMSSW_10_2_9/src/ISR_miniAOD/miniAOD/python/2646E8AE-4DF1-E811-A7D4-549F358EB7D7.root')
+                                #fileNames = cms.untracked.vstring('file:/uscms_data/d3/semrat/SUSY/CMSSW_11_2_0_pre5/src/ISR_miniAOD/CMSSW_10_2_9/src/ISR_miniAOD/miniAOD/python/2646E8AE-4DF1-E811-A7D4-549F358EB7D7.root')
                                 
                                 # -------------------------------------------------------------
                                 # ------------------------ 2016 TTJets ------------------------
                                 # ------------------------------------------------------------- 
                                 #fileNames = cms.untracked.vstring('root://cmsxrootd.fnal.gov//store/mc/RunIISummer16MiniAODv3/TTJets_TuneCUETP8M1_13TeV-madgraphMLM-pythia8/MINIAODSIM/PUMoriond17_94X_mcRun2_asymptotic_v3-v1/40000/0A4EAAB1-9223-E911-B512-A4BF01283A8B.root')
-                                #fileNames = cms.untracked.vstring('file:/uscms_data/d3/semrat/SUSY/CMSSW_11_2_0_pre5/src/ISR_miniAOD/CMSSW_10_2_9/src/ISR_miniAOD/miniAOD/python/0A4EAAB1-9223-E911-B512-A4BF01283A8B.root')
-                            
+                                fileNames = cms.untracked.vstring('file:/uscms_data/d3/semrat/SUSY/CMSSW_11_2_0_pre5/src/ISR_miniAOD/CMSSW_10_2_9/src/ISR_miniAOD/miniAOD/python/0A4EAAB1-9223-E911-B512-A4BF01283A8B.root'),
+
+                                # -------------------------------------------------------------
+                                # eventsToProcess = cms.untracked.VEventRange("RunNumber:EventNumber-RunNumber:EventNumber")
+                                # RunNumber = 1 for MC 
+                                # for "print tree"
+                                # -------------------------------------------------------------
+                                # event number for gluon - u
+                                eventsToProcess = cms.untracked.VEventRange("1:25722475-1:25722475"),
+                                # event number for gluon - anti-u
+                                #eventsToProcess = cms.untracked.VEventRange("1:4658304-1:4658304"),                            
+
                                 # ---------------------------------------------------------    
                                 # ------------------------ 2016 TT ------------------------
                                 # --------------------------------------------------------- 
@@ -52,20 +62,19 @@ process.source = cms.Source("PoolSource",
 # ---------------------
 # get the gen particles
 # ---------------------
-process.demo = cms.EDAnalyzer('ISR_miniAOD',
-                                genParticles = cms.untracked.InputTag("prunedGenParticles"))
-
+#process.demo = cms.EDAnalyzer('ISR_miniAOD',
+#                                genParticles = cms.untracked.InputTag("prunedGenParticles"))
 
 # -------------------
 # print particle list
 # -------------------
-#process.printAllTree = cms.EDAnalyzer("ParticleListDrawer",
-#                                    maxEventsToPrint         = cms.untracked.int32(10), # 1
-#                                    printVertex              = cms.untracked.bool(False),
-#                                    printOnlyHardInteraction = cms.untracked.bool(False),
-#                                    src                      = cms.InputTag("prunedGenParticles")
-#                                  )
-#process.p = cms.Path(process.printAllTree)
+process.printAllTree = cms.EDAnalyzer("ParticleListDrawer",
+                                    maxEventsToPrint         = cms.untracked.int32(10), # 1
+                                    printVertex              = cms.untracked.bool(False),
+                                    printOnlyHardInteraction = cms.untracked.bool(False),
+                                    src                      = cms.InputTag("prunedGenParticles")
+                                  )
+process.p = cms.Path(process.printAllTree)
 
 # -----------
 # print decay
@@ -92,19 +101,13 @@ process.demo = cms.EDAnalyzer('ISR_miniAOD',
 #                                  )
 #process.p = cms.Path(process.printTree)
 
-#process.p = cms.Path(process.printAllTree
-#                     *process.printDecay
-#                     * process.printTree
-#                    )
-
 # ---------------------------
 # create the output root file
 # ---------------------------
 #process.out = cms.OutputModule("PoolOutputModule", fileName = cms.untracked.string("output.root"))
-process.TFileService = cms.Service("TFileService", fileName = cms.string("2016_miniAOD_RPV850.root") )
-#process.TFileService = cms.Service("TFileService", fileName = cms.string("TreeMaker.root") )
+#process.TFileService = cms.Service("TFileService", fileName = cms.string("2016_miniAOD_TTJets.root") )
 
-process.p  = cms.Path(process.demo)
+#process.p  = cms.Path(process.demo)
 #process.ep = cms.EndPath(process.out)
 
 process.schedule = cms.Schedule( process.p )
