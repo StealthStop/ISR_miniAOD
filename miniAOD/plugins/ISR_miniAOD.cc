@@ -65,7 +65,7 @@ class ISR_miniAOD : public edm::one::EDAnalyzer<edm::one::SharedResources>
         TH1F * miniAOD_ISR_Eta; 
 
         // -------------------------------
-        // Intermediate ISR definitions 
+        // Categorized  ISR definitions 
         // -------------------------------
         // dau-mom: gluon - udsc 
         TH1F * miniAOD_ISR_Eta_gudsc;
@@ -73,19 +73,32 @@ class ISR_miniAOD : public edm::one::EDAnalyzer<edm::one::SharedResources>
         // dau-mom: gluon - b
         TH1F * miniAOD_ISR_Eta_gb;
 
-        // dau-mom: gluon - t
-        TH1F * miniAOD_ISR_Eta_gt;
-        
         // dau-mom: udsc - gluon
-        TH1F * miniAOD_ISR_Eta_udscg;
-        
+        TH1F * miniAOD_ISR_Eta_udscg;      
+        TH1F * miniAOD_ISR_Eta_PtDiv_0to100_udscg;
+        TH1F * miniAOD_ISR_Eta_PtDiv_100to200_udscg;
+        TH1F * miniAOD_ISR_Eta_PtDiv_g200_udscg;
+
+        TH1F * miniAOD_ISR_Pt_udscg;       
+        TH1F * miniAOD_ISR_divPt_udscg;    
+        TH1F * miniAOD_ISR_Mom_Pt_udscg;
+
+        TH1F * miniAOD_ISR_Eta_neg_udscg;
+        TH1F * miniAOD_ISR_Eta_anti_ug;
+        TH1F * miniAOD_ISR_Eta_anti_dg;
+        TH1F * miniAOD_ISR_Eta_anti_sg;
+        TH1F * miniAOD_ISR_Eta_anti_cg;       
+
+        TH1F * miniAOD_ISR_Eta_pos_udscg;       
+        TH1F * miniAOD_ISR_Eta_ug;
+        TH1F * miniAOD_ISR_Eta_dg;
+        TH1F * miniAOD_ISR_Eta_sg;
+        TH1F * miniAOD_ISR_Eta_cg; 
+
         // dau-mom: b - gluon
         TH1F * miniAOD_ISR_Eta_bg;
         
-        // dau-mom: t - gluon 
-        TH1F * miniAOD_ISR_Eta_tg;
-
-        // dau-mom : gluon -> gluon
+        // dau-mom : gluon - gluon
         TH1F * miniAOD_ISR_Eta_gg;
 };
 
@@ -112,19 +125,32 @@ ISR_miniAOD::ISR_miniAOD(const edm::ParameterSet& iConfig) :
     // dau-mom: gluon - b
     miniAOD_ISR_Eta_gb = fs->make<TH1F>( "miniAOD_ISR_Eta_gb", "ISR Eta", 100, -6, 6  );
     
-    // dau-mom: gluon - t
-    miniAOD_ISR_Eta_gt = fs->make<TH1F>( "miniAOD_ISR_Eta_gt", "ISR Eta", 100, -6, 6  );
-    
     // dau-mom: udsc - gluon
-    miniAOD_ISR_Eta_udscg = fs->make<TH1F>( "miniAOD_ISR_Eta_udscg", "ISR Eta", 100, -6, 6  );
-    
+    miniAOD_ISR_Eta_udscg               = fs->make<TH1F>( "miniAOD_ISR_Eta_udscg", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_PtDiv_0to100_udscg   = fs->make<TH1F>( "miniAOD_ISR_Eta_PtDiv_0to100_udscg", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_PtDiv_100to200_udscg = fs->make<TH1F>( "miniAOD_ISR_Eta_PtDiv_100to200_udscg", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_PtDiv_g200_udscg    = fs->make<TH1F>( "miniAOD_ISR_Eta_PtDiv_g200_udscg", "ISR Eta", 100, -6, 6  );
+
+    miniAOD_ISR_Pt_udscg      = fs->make<TH1F>( "miniAOD_ISR_Pt_udscg", "ISR Pt", 100,  0, 1000 );
+    miniAOD_ISR_divPt_udscg   = fs->make<TH1F>( "miniAOD_ISR_divPt_udscg", "ISR Pt", 3,  0, 3 );
+    miniAOD_ISR_Mom_Pt_udscg  = fs->make<TH1F>( "miniAOD_ISR_Mom_Pt_udscg", "ISR Mom Pt", 100,  0, 1000 );
+
+    miniAOD_ISR_Eta_neg_udscg = fs->make<TH1F>( "miniAOD_ISR_Eta_neg_udscg", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_anti_ug   = fs->make<TH1F>( "miniAOD_ISR_Eta_anti_ug", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_anti_dg   = fs->make<TH1F>( "miniAOD_ISR_Eta_anti_dg", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_anti_sg   = fs->make<TH1F>( "miniAOD_ISR_Eta_anti_sg", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_anti_cg   = fs->make<TH1F>( "miniAOD_ISR_Eta_anti_cg", "ISR Eta", 100, -6, 6  );
+
+    miniAOD_ISR_Eta_pos_udscg = fs->make<TH1F>( "miniAOD_ISR_Eta_pos_udscg", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_ug        = fs->make<TH1F>( "miniAOD_ISR_Eta_ug", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_dg        = fs->make<TH1F>( "miniAOD_ISR_Eta_dg", "ISR Eta", 100, -6, 6  ); 
+    miniAOD_ISR_Eta_sg        = fs->make<TH1F>( "miniAOD_ISR_Eta_sg", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_cg        = fs->make<TH1F>( "miniAOD_ISR_Eta_cg", "ISR Eta", 100, -6, 6  );
+ 
     // dau-mom: b - gluon
     miniAOD_ISR_Eta_bg = fs->make<TH1F>( "miniAOD_ISR_Eta_bg", "ISR Eta", 100, -6, 6  );
     
-    // dau-mom: t - gluon 
-    miniAOD_ISR_Eta_tg = fs->make<TH1F>( "miniAOD_ISR_Eta_tg", "ISR Eta", 100, -6, 6  );
-    
-    // dau-mom : gluon -> gluon
+    // dau-mom : gluon - gluon
     miniAOD_ISR_Eta_gg = fs->make<TH1F>( "miniAOD_ISR_Eta_gg", "ISR Eta", 100, -6, 6  );
 
 }
@@ -177,46 +203,135 @@ void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
             miniAOD_ISR_Eta->Fill(dauEta); 
         }
        
-        // -------------------------------
-        // Intermediate ISR definitions   
-        // -------------------------------
-        // dau-mom: gluon - udsc 
+        // ------------------------------
+        // Categorized ISR definitions   
+        // ------------------------------
+        // ------------------------------
+        // (1) dau-mom: gluon - udsc 
+        // -- Small Positive Asymmetry
+        // ------------------------------
         if ( abs(dauPdgId) == 21  && abs(momPdgId) <= 4 && status == 23 )
         {
             miniAOD_ISR_Eta_gudsc->Fill(dauEta);   
         }
 
-        // dau-mom: gluon - b
+        // -------------------------
+        // (2) dau-mom: gluon - b
+        // -------------------------
         if ( abs(dauPdgId) == 21  && abs(momPdgId) == 5 && status == 23 )
         {
             miniAOD_ISR_Eta_gb->Fill(dauEta);
         }
 
-        // dau-mom: gluon - t
-        if ( abs(dauPdgId) == 21  && abs(momPdgId) == 6 && status == 23 )
-        {
-            miniAOD_ISR_Eta_gt->Fill(dauEta);
-        }
     
-        // dau-mom: udsc - gluon 
+        // ------------------------------
+        // (3) dau-mom: udsc - gluon
+        // -- Large Negative Asymmetry 
+        // ------------------------------
         if ( abs(dauPdgId) <= 4  && abs(momPdgId) == 21 && status == 23 )
         {
             miniAOD_ISR_Eta_udscg->Fill(dauEta);
+            if( true && dauPt > 0   && dauPt <= 100 ) miniAOD_ISR_Eta_PtDiv_0to100_udscg->Fill(dauEta);
+            if( true && dauPt > 100 && dauPt <= 200 ) miniAOD_ISR_Eta_PtDiv_100to200_udscg->Fill(dauEta);
+            if( true && dauPt > 200                 ) miniAOD_ISR_Eta_PtDiv_g200_udscg->Fill(dauEta);
+            
+            miniAOD_ISR_Pt_udscg->Fill(dauPt);
+            if( true && dauPt > 0   && dauPt <= 100 ) miniAOD_ISR_divPt_udscg->Fill(0.5, 1.0);
+            if( true && dauPt > 100 && dauPt <= 200 ) miniAOD_ISR_divPt_udscg->Fill(1.5, 1.0);
+            if( true && dauPt > 200                 ) miniAOD_ISR_divPt_udscg->Fill(2.5, 1.0);
+
+            miniAOD_ISR_Mom_Pt_udscg->Fill(momPt);
         }
 
-        // dau-mom: b - gluon
+        // --------------------------
+        // dau-mom: anti-udsc - gluon
+        // -------------------------- 
+        if ( (abs(dauPdgId) <= 4 && dauPdgId < 0)  && (momPdgId) == 21 && status == 23 )
+        {
+            miniAOD_ISR_Eta_neg_udscg->Fill(dauEta);
+        }
+
+        // dau-mom: anti-u - gluon
+        if ( (dauPdgId) == (-2)  && (momPdgId) == 21 && status == 23 )
+        {
+            miniAOD_ISR_Eta_anti_ug->Fill(dauEta);
+
+            //if (dauEta < -1.4)
+            //{
+            //    std::cout << "Event number of g-anti-u" << std::endl;
+            //}
+        }
+
+        // dau-mom: anti-d - gluon
+        if ( (dauPdgId) == (-1)  && (momPdgId) == 21 && status == 23 )
+        {
+            miniAOD_ISR_Eta_anti_dg->Fill(dauEta);
+        }
+
+        // dau-mom: anti-s - gluon
+        if ( (dauPdgId) == (-3)  && (momPdgId) == 21 && status == 23 )
+        {
+            miniAOD_ISR_Eta_anti_sg->Fill(dauEta);
+        }
+
+        // dau-mom: anti-c - gluon
+        if ( (dauPdgId) == (-4)  && (momPdgId) == 21 && status == 23 )
+        {
+            miniAOD_ISR_Eta_anti_cg->Fill(dauEta);
+        }
+
+
+        // ---------------------
+        // dau-mom: udsc - gluon
+        // --------------------- 
+        if ( (abs(dauPdgId) <= 4 && dauPdgId > 0) && (momPdgId) == 21 && status == 23 )
+        {
+            miniAOD_ISR_Eta_pos_udscg->Fill(dauEta);
+        }
+
+        // dau-mom: u - gluon 
+        if ( (dauPdgId) == 2  && (momPdgId) == 21 && status == 23 )
+        {
+            miniAOD_ISR_Eta_ug->Fill(dauEta);
+            
+            //if (dauEta < -1.4)
+            //{
+            //    std::cout << "Event number of gu" << std::endl;
+            //}
+
+        }
+
+        // dau-mom: d - gluon 
+        if ( (dauPdgId) == 1  && (momPdgId) == 21 && status == 23 )
+        {
+            miniAOD_ISR_Eta_dg->Fill(dauEta);
+        }
+
+        // dau-mom: s - gluon 
+        if ( (dauPdgId) == 3  && (momPdgId) == 21 && status == 23 )
+        {
+            miniAOD_ISR_Eta_sg->Fill(dauEta);
+        }    
+
+        // dau-mom: c - gluon 
+        if ( (dauPdgId) == 4  && (momPdgId) == 21 && status == 23 )
+        {
+            miniAOD_ISR_Eta_cg->Fill(dauEta);
+        }
+
+        // -------------------------
+        // (4) dau-mom: b - gluon
+        // -------------------------
         if ( abs(dauPdgId) == 5  && abs(momPdgId) == 21 && status == 23 )
         {
             miniAOD_ISR_Eta_bg->Fill(dauEta);
         }
 
-        // dau-mom: t - gluon
-        if ( abs(dauPdgId) == 6  && abs(momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_tg->Fill(dauEta);
-        }
 
-        // dau-mom: gluon - gluon
+        // -----------------------------
+        // (5) dau-mom: gluon - gluon
+        // -- Zero Asymmetry
+        // ------------------------------
         if ( abs(dauPdgId) == 21  && abs(momPdgId) == 21 && status == 23 )
         {
             miniAOD_ISR_Eta_gg->Fill(dauEta);
