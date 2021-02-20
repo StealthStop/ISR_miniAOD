@@ -60,46 +60,44 @@ class ISR_miniAOD : public edm::one::EDAnalyzer<edm::one::SharedResources>
         edm::EDGetTokenT<reco::GenParticleCollection> genParticlesToken_;        
    
         // --------------------------------------- 
-        // ISR definition - dau-mom: qg, gq, gg   
-        // ---------------------------------------  
-        TH1F * miniAOD_ISR_Eta; 
-
-        // -------------------------------
-        // Categorized  ISR definitions 
-        // -------------------------------
-        // dau-mom: gluon - udsc 
-        TH1F * miniAOD_ISR_Eta_gudsc;
-
-        // dau-mom: gluon - b
-        TH1F * miniAOD_ISR_Eta_gb;
-
-        // dau-mom: udsc - gluon
-        TH1F * miniAOD_ISR_Eta_udscg;      
-        TH1F * miniAOD_ISR_Eta_PtDiv_0to100_udscg;
-        TH1F * miniAOD_ISR_Eta_PtDiv_100to200_udscg;
-        TH1F * miniAOD_ISR_Eta_PtDiv_g200_udscg;
-
-        TH1F * miniAOD_ISR_Pt_udscg;       
-        TH1F * miniAOD_ISR_divPt_udscg;    
-        TH1F * miniAOD_ISR_Mom_Pt_udscg;
-
-        TH1F * miniAOD_ISR_Eta_neg_udscg;
-        TH1F * miniAOD_ISR_Eta_anti_ug;
-        TH1F * miniAOD_ISR_Eta_anti_dg;
-        TH1F * miniAOD_ISR_Eta_anti_sg;
-        TH1F * miniAOD_ISR_Eta_anti_cg;       
-
-        TH1F * miniAOD_ISR_Eta_pos_udscg;       
-        TH1F * miniAOD_ISR_Eta_ug;
-        TH1F * miniAOD_ISR_Eta_dg;
-        TH1F * miniAOD_ISR_Eta_sg;
-        TH1F * miniAOD_ISR_Eta_cg; 
-
-        // dau-mom: b - gluon
-        TH1F * miniAOD_ISR_Eta_bg;
-        
-        // dau-mom : gluon - gluon
+        // ISR definition - mom-dau: gg, qg, gq  
+        // --------------------------------------- 
+        // before debug - first version - Semra
+        TH1F * miniAOD_ISR_Eta;
         TH1F * miniAOD_ISR_Eta_gg;
+        TH1F * miniAOD_ISR_Eta_qg;
+        TH1F * miniAOD_ISR_Eta_gq;
+        //TH1F * miniAOD_ISR_Pt;
+        //TH1F * miniAOD_ISR_Pt_gg;
+        //TH1F * miniAOD_ISR_Pt_qg;
+        //TH1F * miniAOD_ISR_Pt_gq;
+        
+        // after debug - last version - Josh
+        TH1F * miniAOD_ISR_Eta_g;
+        TH1F * miniAOD_ISR_Eta_gg_g;
+        TH1F * miniAOD_ISR_Eta_gg_q;
+        TH1F * miniAOD_ISR_Eta_qq_g;
+        TH1F * miniAOD_ISR_Eta_qq_q;
+        TH1F * miniAOD_ISR_Eta_gq_gq;
+        //TH1F * miniAOD_ISR_Pt_g;
+        //TH1F * miniAOD_ISR_Pt_gg_g;
+        //TH1F * miniAOD_ISR_Pt_gg_q;
+        //TH1F * miniAOD_ISR_Pt_qq_g;
+        //TH1F * miniAOD_ISR_Pt_qq_q;
+        //TH1F * miniAOD_ISR_Pt_gq_gq;
+
+        // events counters
+        TH1F * totalEvents;
+        TH1F * NumISR_Events;
+        TH1F * NumISR_Events_gg;
+        TH1F * NumISR_Events_qg;
+        TH1F * NumISR_Events_gq;
+        TH1F * NumISR_Events_g;
+        TH1F * NumISR_Events_gg_g;
+        TH1F * NumISR_Events_gg_q;
+        TH1F * NumISR_Events_qq_g;
+        TH1F * NumISR_Events_qq_q;
+        TH1F * NumISR_Events_gq_gq;
 };
 
 // ------------------------------
@@ -112,47 +110,44 @@ ISR_miniAOD::ISR_miniAOD(const edm::ParameterSet& iConfig) :
     edm::Service<TFileService> fs;
 
     // ---------------------------------------
-    // ISR definition - dau-mom: qg, gq, gg   
+    // ISR definition - mom-dau: gg, qg, gq 
     // ---------------------------------------
-    miniAOD_ISR_Eta = fs->make<TH1F>( "miniAOD_ISR_Eta", "ISR Eta", 100, -6, 6  );
+    // before debug - first version - Semra
+    miniAOD_ISR_Eta      = fs->make<TH1F>( "miniAOD_ISR_Eta",    "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_gg   = fs->make<TH1F>( "miniAOD_ISR_Eta_gg", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_qg   = fs->make<TH1F>( "miniAOD_ISR_Eta_qg", "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_gq   = fs->make<TH1F>( "miniAOD_ISR_Eta_gq", "ISR Eta", 100, -6, 6  );
+    //miniAOD_ISR_Pt       = fs->make<TH1F>( "miniAOD_ISR_Pt",    "ISR Pt", 100,  0, 1000 );
+    //miniAOD_ISR_Pt_gg    = fs->make<TH1F>( "miniAOD_ISR_Pt_gg", "ISR Pt", 100,  0, 1000 );
+    //miniAOD_ISR_Pt_qg    = fs->make<TH1F>( "miniAOD_ISR_Pt_qg", "ISR Pt", 100,  0, 1000 );
+    //miniAOD_ISR_Pt_gq    = fs->make<TH1F>( "miniAOD_ISR_Pt_gq", "ISR Pt", 100,  0, 1000 );
     
-    // -------------------------------
-    // Intermediate ISR definitions   
-    // ------------------------------- 
-    // dau-mom: gluon - udsc 
-    miniAOD_ISR_Eta_gudsc = fs->make<TH1F>( "miniAOD_ISR_Eta_gudsc", "ISR Eta", 100, -6, 6  );
-    
-    // dau-mom: gluon - b
-    miniAOD_ISR_Eta_gb = fs->make<TH1F>( "miniAOD_ISR_Eta_gb", "ISR Eta", 100, -6, 6  );
-    
-    // dau-mom: udsc - gluon
-    miniAOD_ISR_Eta_udscg               = fs->make<TH1F>( "miniAOD_ISR_Eta_udscg", "ISR Eta", 100, -6, 6  );
-    miniAOD_ISR_Eta_PtDiv_0to100_udscg   = fs->make<TH1F>( "miniAOD_ISR_Eta_PtDiv_0to100_udscg", "ISR Eta", 100, -6, 6  );
-    miniAOD_ISR_Eta_PtDiv_100to200_udscg = fs->make<TH1F>( "miniAOD_ISR_Eta_PtDiv_100to200_udscg", "ISR Eta", 100, -6, 6  );
-    miniAOD_ISR_Eta_PtDiv_g200_udscg    = fs->make<TH1F>( "miniAOD_ISR_Eta_PtDiv_g200_udscg", "ISR Eta", 100, -6, 6  );
-
-    miniAOD_ISR_Pt_udscg      = fs->make<TH1F>( "miniAOD_ISR_Pt_udscg", "ISR Pt", 100,  0, 1000 );
-    miniAOD_ISR_divPt_udscg   = fs->make<TH1F>( "miniAOD_ISR_divPt_udscg", "ISR Pt", 3,  0, 3 );
-    miniAOD_ISR_Mom_Pt_udscg  = fs->make<TH1F>( "miniAOD_ISR_Mom_Pt_udscg", "ISR Mom Pt", 100,  0, 1000 );
-
-    miniAOD_ISR_Eta_neg_udscg = fs->make<TH1F>( "miniAOD_ISR_Eta_neg_udscg", "ISR Eta", 100, -6, 6  );
-    miniAOD_ISR_Eta_anti_ug   = fs->make<TH1F>( "miniAOD_ISR_Eta_anti_ug", "ISR Eta", 100, -6, 6  );
-    miniAOD_ISR_Eta_anti_dg   = fs->make<TH1F>( "miniAOD_ISR_Eta_anti_dg", "ISR Eta", 100, -6, 6  );
-    miniAOD_ISR_Eta_anti_sg   = fs->make<TH1F>( "miniAOD_ISR_Eta_anti_sg", "ISR Eta", 100, -6, 6  );
-    miniAOD_ISR_Eta_anti_cg   = fs->make<TH1F>( "miniAOD_ISR_Eta_anti_cg", "ISR Eta", 100, -6, 6  );
-
-    miniAOD_ISR_Eta_pos_udscg = fs->make<TH1F>( "miniAOD_ISR_Eta_pos_udscg", "ISR Eta", 100, -6, 6  );
-    miniAOD_ISR_Eta_ug        = fs->make<TH1F>( "miniAOD_ISR_Eta_ug", "ISR Eta", 100, -6, 6  );
-    miniAOD_ISR_Eta_dg        = fs->make<TH1F>( "miniAOD_ISR_Eta_dg", "ISR Eta", 100, -6, 6  ); 
-    miniAOD_ISR_Eta_sg        = fs->make<TH1F>( "miniAOD_ISR_Eta_sg", "ISR Eta", 100, -6, 6  );
-    miniAOD_ISR_Eta_cg        = fs->make<TH1F>( "miniAOD_ISR_Eta_cg", "ISR Eta", 100, -6, 6  );
- 
-    // dau-mom: b - gluon
-    miniAOD_ISR_Eta_bg = fs->make<TH1F>( "miniAOD_ISR_Eta_bg", "ISR Eta", 100, -6, 6  );
-    
-    // dau-mom : gluon - gluon
-    miniAOD_ISR_Eta_gg = fs->make<TH1F>( "miniAOD_ISR_Eta_gg", "ISR Eta", 100, -6, 6  );
-
+    // after debug - last version - Josh
+    miniAOD_ISR_Eta_g     = fs->make<TH1F>( "miniAOD_ISR_Eta_g",     "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_gg_g  = fs->make<TH1F>( "miniAOD_ISR_Eta_gg_g",  "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_gg_q  = fs->make<TH1F>( "miniAOD_ISR_Eta_gg_q",  "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_qq_g  = fs->make<TH1F>( "miniAOD_ISR_Eta_qq_g",  "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_qq_q  = fs->make<TH1F>( "miniAOD_ISR_Eta_qq_q",  "ISR Eta", 100, -6, 6  );
+    miniAOD_ISR_Eta_gq_gq = fs->make<TH1F>( "miniAOD_ISR_Eta_gq_gq", "ISR Eta", 100, -6, 6  );
+    //miniAOD_ISR_Pt_g      = fs->make<TH1F>( "miniAOD_ISR_Pt_g",      "ISR Pt", 100,  0, 1000 );
+    //miniAOD_ISR_Pt_gg_g   = fs->make<TH1F>( "miniAOD_ISR_Pt_gg_g",   "ISR Pt", 100,  0, 1000 );
+    //miniAOD_ISR_Pt_gg_q   = fs->make<TH1F>( "miniAOD_ISR_Pt_gg_q",   "ISR Pt", 100,  0, 1000 );
+    //miniAOD_ISR_Pt_qq_g   = fs->make<TH1F>( "miniAOD_ISR_Pt_qq_g",   "ISR Pt", 100,  0, 1000 );
+    //miniAOD_ISR_Pt_qq_q   = fs->make<TH1F>( "miniAOD_ISR_Pt_qq_q",   "ISR Pt", 100,  0, 1000 );
+    //miniAOD_ISR_Pt_gq_gq  = fs->make<TH1F>( "miniAOD_ISR_Pt_gq_gq",  "ISR Pt", 100,  0, 1000 );   
+   
+    // event counters
+    totalEvents         = fs->make<TH1F>( "totalEvents",        "Events",        5, 0, 5 );
+    NumISR_Events       = fs->make<TH1F>( "NumISR_Events",      "NumISR_Events", 5, 0, 5 );
+    NumISR_Events_gg    = fs->make<TH1F>( "NumISR_Events_gg",   "NumISR_Events", 5, 0, 5 ); 
+    NumISR_Events_qg    = fs->make<TH1F>( "NumISR_Events_qg",   "NumISR_Events", 5, 0, 5 );
+    NumISR_Events_gq    = fs->make<TH1F>( "NumISR_Events_gq",   "NumISR_Events", 5, 0, 5 );
+    NumISR_Events_g     = fs->make<TH1F>( "NumISR_Events_g",    "NumISR_Events", 5, 0, 5 );
+    NumISR_Events_gg_g  = fs->make<TH1F>( "NumISR_Events_gg_g", "NumISR_Events", 5, 0, 5 );
+    NumISR_Events_gg_q  = fs->make<TH1F>( "NumISR_Events_gg_q", "NumISR_Events", 5, 0, 5 );
+    NumISR_Events_qq_g  = fs->make<TH1F>( "NumISR_Events_qq_g", "NumISR_Events", 5, 0, 5 );
+    NumISR_Events_qq_q  = fs->make<TH1F>( "NumISR_Events_qq_q", "NumISR_Events", 5, 0, 5 );
+    NumISR_Events_gq_gq = fs->make<TH1F>( "NumISR_Events_gq_gq","NumISR_Events", 5, 0, 5 );
 }
 
 ISR_miniAOD::~ISR_miniAOD()
@@ -168,6 +163,10 @@ ISR_miniAOD::~ISR_miniAOD()
 void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetup)
 {
     using namespace edm;
+
+    int totEvents = 0;
+    int nISR   = 0, nISR_gg   = 0, nISR_qg   = 0, nISR_gq   = 0;
+    int nISR_g = 0, nISR_gg_g = 0, nISR_gg_q = 0, nISR_qq_g = 0, nISR_qq_q = 0, nISR_gq_gq = 0;
 
     // ------------
     // GenParticles
@@ -189,156 +188,134 @@ void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
         const reco::Candidate *mom = p.mother();
         int momPdgId  = mom->pdgId();
         int dauNum    = mom->numberOfDaughters();
+        int momStatus = mom->status();
         double momPt  = mom->pt();
         double dauPt  = p.p4().pt();
         double dauEta = p.p4().eta();
 
         // ---------------------------------------
-        // ISR definition - dau-mom: qg, gq, gg 
+        // before debug - first version - Semra
+        // -- ISR definition - mom-dau: gg, qg, gq
         // ---------------------------------------
-        if ( ( abs(dauPdgId) <= 6  && abs(momPdgId) == 21 && status == 23 ) ||
-           (   abs(dauPdgId) == 21 && abs(momPdgId) <= 6  && status == 23 ) || 
-           (   abs(dauPdgId) == 21 && abs(momPdgId) == 21 && status == 23 ) ) 
+        if ( ( abs(momPdgId) == 21 && abs(dauPdgId) == 21 && status == 23 ) ||
+           (   abs(momPdgId) <= 6  && abs(dauPdgId) == 21 && status == 23 ) ||  
+           (   abs(momPdgId) == 21 && abs(dauPdgId) <= 6  && status == 23 ) )
         {
             miniAOD_ISR_Eta->Fill(dauEta); 
-        }
-       
-        // ------------------------------
-        // Categorized ISR definitions   
-        // ------------------------------
-        // ------------------------------
-        // (1) dau-mom: gluon - udsc 
-        // -- Small Positive Asymmetry
-        // ------------------------------
-        if ( abs(dauPdgId) == 21  && abs(momPdgId) <= 4 && status == 23 )
-        {
-            miniAOD_ISR_Eta_gudsc->Fill(dauEta);   
+            //miniAOD_ISR_Pt->Fill(dauPt);
+            nISR++;
         }
 
-        // -------------------------
-        // (2) dau-mom: gluon - b
-        // -------------------------
-        if ( abs(dauPdgId) == 21  && abs(momPdgId) == 5 && status == 23 )
-        {
-            miniAOD_ISR_Eta_gb->Fill(dauEta);
-        }
-
-    
-        // ------------------------------
-        // (3) dau-mom: udsc - gluon
-        // -- Large Negative Asymmetry 
-        // ------------------------------
-        if ( abs(dauPdgId) <= 4  && abs(momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_udscg->Fill(dauEta);
-            if( true && dauPt > 0   && dauPt <= 100 ) miniAOD_ISR_Eta_PtDiv_0to100_udscg->Fill(dauEta);
-            if( true && dauPt > 100 && dauPt <= 200 ) miniAOD_ISR_Eta_PtDiv_100to200_udscg->Fill(dauEta);
-            if( true && dauPt > 200                 ) miniAOD_ISR_Eta_PtDiv_g200_udscg->Fill(dauEta);
-            
-            miniAOD_ISR_Pt_udscg->Fill(dauPt);
-            if( true && dauPt > 0   && dauPt <= 100 ) miniAOD_ISR_divPt_udscg->Fill(0.5, 1.0);
-            if( true && dauPt > 100 && dauPt <= 200 ) miniAOD_ISR_divPt_udscg->Fill(1.5, 1.0);
-            if( true && dauPt > 200                 ) miniAOD_ISR_divPt_udscg->Fill(2.5, 1.0);
-
-            miniAOD_ISR_Mom_Pt_udscg->Fill(momPt);
-        }
-
-        // --------------------------
-        // dau-mom: anti-udsc - gluon
-        // -------------------------- 
-        if ( (abs(dauPdgId) <= 4 && dauPdgId < 0)  && (momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_neg_udscg->Fill(dauEta);
-        }
-
-        // dau-mom: anti-u - gluon
-        if ( (dauPdgId) == (-2)  && (momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_anti_ug->Fill(dauEta);
-
-            //if (dauEta < -1.4)
-            //{
-            //    std::cout << "Event number of g-anti-u" << std::endl;
-            //}
-        }
-
-        // dau-mom: anti-d - gluon
-        if ( (dauPdgId) == (-1)  && (momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_anti_dg->Fill(dauEta);
-        }
-
-        // dau-mom: anti-s - gluon
-        if ( (dauPdgId) == (-3)  && (momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_anti_sg->Fill(dauEta);
-        }
-
-        // dau-mom: anti-c - gluon
-        if ( (dauPdgId) == (-4)  && (momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_anti_cg->Fill(dauEta);
-        }
-
-
-        // ---------------------
-        // dau-mom: udsc - gluon
-        // --------------------- 
-        if ( (abs(dauPdgId) <= 4 && dauPdgId > 0) && (momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_pos_udscg->Fill(dauEta);
-        }
-
-        // dau-mom: u - gluon 
-        if ( (dauPdgId) == 2  && (momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_ug->Fill(dauEta);
-            
-            //if (dauEta < -1.4)
-            //{
-            //    std::cout << "Event number of gu" << std::endl;
-            //}
-
-        }
-
-        // dau-mom: d - gluon 
-        if ( (dauPdgId) == 1  && (momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_dg->Fill(dauEta);
-        }
-
-        // dau-mom: s - gluon 
-        if ( (dauPdgId) == 3  && (momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_sg->Fill(dauEta);
-        }    
-
-        // dau-mom: c - gluon 
-        if ( (dauPdgId) == 4  && (momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_cg->Fill(dauEta);
-        }
-
-        // -------------------------
-        // (4) dau-mom: b - gluon
-        // -------------------------
-        if ( abs(dauPdgId) == 5  && abs(momPdgId) == 21 && status == 23 )
-        {
-            miniAOD_ISR_Eta_bg->Fill(dauEta);
-        }
-
-
-        // -----------------------------
-        // (5) dau-mom: gluon - gluon
-        // -- Zero Asymmetry
-        // ------------------------------
-        if ( abs(dauPdgId) == 21  && abs(momPdgId) == 21 && status == 23 )
+        // ----------------
+        // categorized ones
+        // ----------------
+        if ( abs(momPdgId) == 21 && abs(dauPdgId) == 21 && status == 23 )
         {
             miniAOD_ISR_Eta_gg->Fill(dauEta);
+            //miniAOD_ISR_Pt_gg->Fill(dauPt);
+            nISR_gg++;
         }
 
+        if ( abs(momPdgId) <= 6 && abs(dauPdgId) == 21 && status == 23 )
+        {
+            miniAOD_ISR_Eta_qg->Fill(dauEta);
+            //miniAOD_ISR_Pt_qg->Fill(dauPt);
+            nISR_qg++;
+        }
+
+        if ( abs(momPdgId) == 21 && abs(dauPdgId) <= 6  && status == 23 )
+        {
+            miniAOD_ISR_Eta_gq->Fill(dauEta);
+            //miniAOD_ISR_Pt_gq->Fill(dauPt);
+            nISR_gq++;
+        }
+
+        // ---------------------------------
+        // after debug - last version - Josh
+        // -- mother status code 21 
+        // -- number of mothers 2 
+        // -- not double counting
+        //    -- NO asymmetry 
+        // ---------------------------------
+        if (momNum == 2)
+        {  
+            if ( ( abs(p.mother(0)->pdgId()) <= 6 || p.mother(0)->pdgId()  == 21 ) &&
+                 ( abs(p.mother(1)->pdgId()) <= 6 || p.mother(1)->pdgId()  == 21 ) &&
+                 (    p.mother(0)->status() == 21 && p.mother(1)->status() == 21 ) &&
+                 ( abs(dauPdgId) <= 6             || abs(dauPdgId) == 21 ) && status == 23 )
+            {
+                miniAOD_ISR_Eta_g->Fill(dauEta);
+                //miniAOD_ISR_Pt_g->Fill(dauPt);
+                nISR_g++;
+            } 
+       
+            // ----------------
+            // categorized ones
+            // ----------------
+            if ( ((p.mother(0)->pdgId()  == 21) && (p.mother(1)->pdgId() == 21)) && 
+                   p.mother(0)->status() == 21  && p.mother(1)->status() == 21   &&
+                   abs(dauPdgId)         == 21  && status                == 23)
+            {
+                miniAOD_ISR_Eta_gg_g->Fill(dauEta);
+                //miniAOD_ISR_Pt_gg_g->Fill(dauPt);
+                nISR_gg_g++;
+            }
+
+            if ( ((p.mother(0)->pdgId()  == 21) && (p.mother(1)->pdgId() == 21)) &&  
+                   p.mother(0)->status() == 21  && p.mother(1)->status() == 21   &&
+                   abs(dauPdgId)         <= 6   && status                == 23 )
+            {
+                miniAOD_ISR_Eta_gg_q->Fill(dauEta);
+                //miniAOD_ISR_Pt_gg_q->Fill(dauPt);
+                nISR_gg_q++;
+            }
+
+            if ( (abs(p.mother(0)->pdgId()) <= 6  && abs(p.mother(1)->pdgId()) <= 6) &&  
+                  p.mother(0)->status()     == 21 && p.mother(1)->status()     == 21 &&
+                  abs(dauPdgId)             == 21 && status                    == 23 )
+            {
+                miniAOD_ISR_Eta_qq_g->Fill(dauEta);
+                //miniAOD_ISR_Pt_qq_g->Fill(dauPt);
+                nISR_qq_g++;
+            }
+
+            if ( (abs(p.mother(0)->pdgId()) <= 6  && abs(p.mother(1)->pdgId()) <= 6) && 
+                  p.mother(0)->status()     == 21 && p.mother(1)->status()     == 21 && 
+                  abs(dauPdgId)             <= 6  && status                    == 23 )
+            {
+                miniAOD_ISR_Eta_qq_q->Fill(dauEta);
+                //miniAOD_ISR_Pt_qq_q->Fill(dauPt);
+                nISR_qq_q++;
+            }
+
+            if ( ( ((p.mother(0)->pdgId()  <= 6)  && (p.mother(1)->pdgId() == 21))   || 
+                   ((p.mother(0)->pdgId()  == 21) && (p.mother(1)->pdgId() <= 6 )) ) &&
+                   p.mother(0)->status()   == 21  && p.mother(1)->status() == 21     &&
+                 ( abs(dauPdgId)           <= 6   || abs(dauPdgId)         == 21 )   && status == 23 )
+            {
+                miniAOD_ISR_Eta_gq_gq->Fill(dauEta);
+                //miniAOD_ISR_Pt_gq_gq->Fill(dauPt);
+                nISR_gq_gq++;    
+            }
+        }
     } // gen particles loop
-    
+   
+    // event counters
+    totEvents++;
+    totalEvents->Fill(totEvents);
+
+    NumISR_Events->Fill(nISR);
+    NumISR_Events_gg->Fill(nISR_gg);
+    NumISR_Events_qg->Fill(nISR_qg);
+    NumISR_Events_gq->Fill(nISR_gq);
+
+    NumISR_Events_g->Fill(nISR_g);
+    NumISR_Events_gg_g->Fill(nISR_gg_g);
+    NumISR_Events_gg_q->Fill(nISR_gg_q);
+    NumISR_Events_qq_g->Fill(nISR_qq_g);
+    NumISR_Events_qq_q->Fill(nISR_qq_q);
+    NumISR_Events_gq_gq->Fill(nISR_gq_gq);
+
 } // event loop
 
 // --------------------------------------------------------------
