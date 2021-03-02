@@ -97,7 +97,9 @@ class ISR_miniAOD : public edm::one::EDAnalyzer<edm::one::SharedResources>
         TH1F * NumISR_Events_gg_q;
         TH1F * NumISR_Events_qq_g;
         TH1F * NumISR_Events_qq_q;
-        TH1F * NumISR_Events_gq_gq;
+        TH1F * NumISR_Events_gq_g;
+        TH1F * NumISR_Events_gq_q;
+
 };
 
 // ------------------------------
@@ -147,7 +149,9 @@ ISR_miniAOD::ISR_miniAOD(const edm::ParameterSet& iConfig) :
     NumISR_Events_gg_q  = fs->make<TH1F>( "NumISR_Events_gg_q", "NumISR_Events", 5, 0, 5 );
     NumISR_Events_qq_g  = fs->make<TH1F>( "NumISR_Events_qq_g", "NumISR_Events", 5, 0, 5 );
     NumISR_Events_qq_q  = fs->make<TH1F>( "NumISR_Events_qq_q", "NumISR_Events", 5, 0, 5 );
-    NumISR_Events_gq_gq = fs->make<TH1F>( "NumISR_Events_gq_gq","NumISR_Events", 5, 0, 5 );
+    NumISR_Events_gq_g = fs->make<TH1F>( "NumISR_Events_gq_g","NumISR_Events", 5, 0, 5 );
+    NumISR_Events_gq_q = fs->make<TH1F>( "NumISR_Events_gq_q","NumISR_Events", 5, 0, 5 );
+
 }
 
 ISR_miniAOD::~ISR_miniAOD()
@@ -166,7 +170,7 @@ void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
 
     int totEvents = 0;
     int nISR   = 0, nISR_gg   = 0, nISR_qg   = 0, nISR_gq   = 0;
-    int nISR_g = 0, nISR_gg_g = 0, nISR_gg_q = 0, nISR_qq_g = 0, nISR_qq_q = 0, nISR_gq_gq = 0;
+    int nISR_g = 0, nISR_gg_g = 0, nISR_gg_q = 0, nISR_qq_g = 0, nISR_qq_q = 0, nISR_gq_g = 0, nISR_gq_q = 0;
 
     // ------------
     // GenParticles
@@ -291,12 +295,21 @@ void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
             if ( ( ((p.mother(0)->pdgId()  <= 6)  && (p.mother(1)->pdgId() == 21))   || 
                    ((p.mother(0)->pdgId()  == 21) && (p.mother(1)->pdgId() <= 6 )) ) &&
                    p.mother(0)->status()   == 21  && p.mother(1)->status() == 21     &&
-                 ( abs(dauPdgId)           <= 6   || abs(dauPdgId)         == 21 )   && status == 23 )
+                 ( abs(dauPdgId)         == 21 )   && status == 23 )
             {
-                miniAOD_ISR_Eta_gq_gq->Fill(dauEta);
-                //miniAOD_ISR_Pt_gq_gq->Fill(dauPt);
-                nISR_gq_gq++;    
+                //miniAOD_ISR_Eta_gq_g->Fill(dauEta);
+                nISR_gq_g++;    
             }
+
+            if ( ( ((p.mother(0)->pdgId()  <= 6)  && (p.mother(1)->pdgId() == 21))   || 
+                   ((p.mother(0)->pdgId()  == 21) && (p.mother(1)->pdgId() <= 6 )) ) &&
+                   p.mother(0)->status()   == 21  && p.mother(1)->status() == 21     &&
+                 ( abs(dauPdgId)           <= 6 )   && status == 23 )
+            {
+                //miniAOD_ISR_Eta_gq_q->Fill(dauEta);
+                nISR_gq_q++;    
+            }
+
         }
     } // gen particles loop
    
@@ -314,7 +327,9 @@ void ISR_miniAOD::analyze(const edm::Event& iEvent, const edm::EventSetup& iSetu
     NumISR_Events_gg_q->Fill(nISR_gg_q);
     NumISR_Events_qq_g->Fill(nISR_qq_g);
     NumISR_Events_qq_q->Fill(nISR_qq_q);
-    NumISR_Events_gq_gq->Fill(nISR_gq_gq);
+    NumISR_Events_gq_g->Fill(nISR_gq_g);
+    NumISR_Events_gq_q->Fill(nISR_gq_q);
+
 
 } // event loop
 
